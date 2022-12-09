@@ -1,0 +1,45 @@
+//
+//    FILE: dht11_test.ino
+//  AUTHOR: Jose Esteban Narvaez Maldonado y Juan Esteban Sotelo Palta
+
+
+
+#include "DHTStable.h"
+#include <LiquidCrystal.h>
+
+DHTStable DHT;
+const int rs = 12, en = 11, d4 = 5, d5 = 4, d6 = 3, d7 = 2;
+LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
+
+#define DHT11_PIN 7
+
+
+void setup()
+{
+  lcd.begin(16,2);  
+  Serial.begin(115200);
+}
+
+
+void loop()
+{
+  int chk = DHT.read11(DHT11_PIN);
+  // DISPLAY DATA
+  lcd.clear();
+  lcd.setCursor(0, 1);
+  double x = DHT.getHumidity();
+  lcd.print(x);
+  lcd.setCursor(0, 0);
+  double y = DHT.getTemperature();
+  lcd.println(y);
+
+  if(y>29){
+    Serial.println("LED.RED=ON,\t");
+  }else if(y<26){
+    Serial.println("LED.BLUE=ON,\t");
+  }else if(y>=26 && y<=29){
+    Serial.println("LED.GREEN=ON,\t");
+  }
+  delay(2000);
+  
+}
